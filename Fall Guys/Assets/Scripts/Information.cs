@@ -17,7 +17,7 @@ public class Information : MonoBehaviourPunCallbacks
         
     }
 
-    void View(string name, int currentPersonnel, int maxPersonnel)
+    public void View(string name, int currentPersonnel, int maxPersonnel)
     {
         roomName = name;
         description.text = roomName + " ( " + currentPersonnel + "/" + maxPersonnel + " ) ";
