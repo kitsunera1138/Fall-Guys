@@ -392,6 +392,7 @@
 "Assets/Scripts/LobbyManager.cs"
 "Assets/Scripts/Parallax.cs"
 "Assets/Scripts/PlayfabManager.cs"
+"Assets/Scripts/Rotation.cs"
 -langversion:9.0
 
 /deterministic
