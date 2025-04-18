@@ -4,6 +4,8 @@ using UnityEngine;
 using Photon.Pun; //MonoBehaviourPun
 
 [RequireComponent(typeof(Rotation))]
+[RequireComponent(typeof(Mouse))]
+
 public class Character : MonoBehaviourPun
 {
     [SerializeField] float speed;
@@ -11,7 +13,7 @@ public class Character : MonoBehaviourPun
     [SerializeField] Rotation rotation;
     [SerializeField] Camera virtualCamera;
     [SerializeField] CharacterController characterController;
-
+    
     private void Awake()
     {
         rotation = GetComponent<Rotation>();
@@ -38,6 +40,8 @@ public class Character : MonoBehaviourPun
         Move();
 
         Rotate();
+
+        Jump();
     }
 
     void Rotate()
@@ -58,6 +62,63 @@ public class Character : MonoBehaviourPun
         Vector3 modifiedTransform = transform.TransformDirection(direction * speed * Time.deltaTime);
         characterController.Move(modifiedTransform);
 
+    }
+
+    float gravity = -9.81f;
+    bool isGravity = false;
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.gameObject.CompareTag("Ground") == true)
+        {
+            Debug.Log("Ground");
+            //중력 비활성화 코드 필요
+            isGravity = false;
+            return;
+        }
+
+    }
+    void OnGravity()
+    {
+        if (characterController.isGrounded == false)
+        {
+            Vector3 directions = transform.TransformDirection(0, Time.deltaTime * gravity, 0);
+            characterController.Move(directions);
+        }
+    }
+
+    void Jump()
+    {
+        OnGravity();
+        //Vector3 direction;
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Debug.Log("Jump");
+        //    direction = transform.TransformDirection(0, transform.position.y + 10f * Time.deltaTime, 0);
+        //    characterController.Move(direction);
+        //}
+
+        ////
+        //if (characterController.isGrounded == false)
+        //{
+        //    Debug.Log("isGroundedfalse");
+        //    direction = transform.TransformDirection(0,Time.deltaTime * gravity,0);
+        //    characterController.Move(direction);
+        //}
+        //else
+        //{
+        //    Debug.Log("Ground");
+        //    if(Input.GetKeyDown(KeyCode.Space)) {
+        //        Debug.Log("Jump");
+        //        direction = transform.TransformDirection(0,(transform.position.y + 5f) * Time.deltaTime,0);
+        //        characterController.Move(direction);
+        //    }
+        //}
+
+        //if(characterController.isGrounded == true)
+        //{
+
+        //}
     }
 
     void DisableCamera()
