@@ -9,11 +9,18 @@ using Photon.Pun; //MonoBehaviourPun
 public class Character : MonoBehaviourPun
 {
     [SerializeField] float speed;
+    [SerializeField] float power; //점프
+    [SerializeField] float gravity = 9.81f; //점프
+
     [SerializeField] Vector3 direction;
+    [SerializeField] Vector3 inputDirection; //점프
+
     [SerializeField] Rotation rotation;
     [SerializeField] Camera virtualCamera;
     [SerializeField] CharacterController characterController;
-    
+
+    [SerializeField] Vector3 startPos;
+
     private void Awake()
     {
         rotation = GetComponent<Rotation>();
@@ -22,26 +29,31 @@ public class Character : MonoBehaviourPun
     }
     void Start()
     {
+        startPos = transform.position;
         if (virtualCamera == null) virtualCamera = GetComponentInChildren<Camera>();
         DisableCamera();
     }
+    public void RestPos()
+    {
+        characterController.enabled = false;
+        transform.position = startPos;
 
+        characterController.enabled = true;
+        characterController.transform.position = startPos;
+    }
     private void Update()
     {
         //나 자신이 아니면 움직이지 못하도록함
         if (photonView.IsMine == false) return;
 
-
-        direction.x = Input.GetAxisRaw("Horizontal");
-        direction.z = Input.GetAxisRaw("Vertical");
-
-        direction.Normalize();
+        Control();
 
         Move();
 
         Rotate();
 
         Jump();
+
     }
 
     void Rotate()
@@ -59,66 +71,41 @@ public class Character : MonoBehaviourPun
         //characterController.Move(direction * speed * Time.deltaTime);
 
         //바라보는 좌표로 이동하는 방식으로 변경
-        Vector3 modifiedTransform = transform.TransformDirection(direction * speed * Time.deltaTime);
-        characterController.Move(modifiedTransform);
+        //Vector3 modifiedTransform = transform.TransformDirection(direction * speed * Time.deltaTime);
+        //characterController.Move(modifiedTransform);
 
+        //점프+ 수정
+        Vector3 modifiedTransform = new Vector3(inputDirection.x,direction.y,inputDirection.z);
+        characterController.Move(modifiedTransform * speed * Time.deltaTime);
+
+        direction.y = modifiedTransform.y;
     }
 
-    float gravity = -9.81f;
-    bool isGravity = false;
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    void Control()
     {
-        if(hit.gameObject.CompareTag("Ground") == true)
-        {
-            Debug.Log("Ground");
-            //중력 비활성화 코드 필요
-            isGravity = false;
-            return;
-        }
+        inputDirection.x = Input.GetAxisRaw("Horizontal");
+        inputDirection.z = Input.GetAxisRaw("Vertical");
 
-    }
-    void OnGravity()
-    {
-        if (characterController.isGrounded == false)
-        {
-            Vector3 directions = transform.TransformDirection(0, Time.deltaTime * gravity, 0);
-            characterController.Move(directions);
-        }
+        inputDirection.Normalize();
+
+        inputDirection = characterController.transform.TransformDirection(inputDirection);
     }
 
     void Jump()
     {
-        OnGravity();
-        //Vector3 direction;
+        if (characterController.isGrounded)
+        {
+            direction.y = -1.0f;
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    Debug.Log("Jump");
-        //    direction = transform.TransformDirection(0, transform.position.y + 10f * Time.deltaTime, 0);
-        //    characterController.Move(direction);
-        //}
-
-        ////
-        //if (characterController.isGrounded == false)
-        //{
-        //    Debug.Log("isGroundedfalse");
-        //    direction = transform.TransformDirection(0,Time.deltaTime * gravity,0);
-        //    characterController.Move(direction);
-        //}
-        //else
-        //{
-        //    Debug.Log("Ground");
-        //    if(Input.GetKeyDown(KeyCode.Space)) {
-        //        Debug.Log("Jump");
-        //        direction = transform.TransformDirection(0,(transform.position.y + 5f) * Time.deltaTime,0);
-        //        characterController.Move(direction);
-        //    }
-        //}
-
-        //if(characterController.isGrounded == true)
-        //{
-
-        //}
+            if (Input.GetButtonDown("Jump"))
+            {
+                direction.y = power;
+            }
+        }
+        else
+        {
+            direction.y -=Time.deltaTime * gravity;
+        }
     }
 
     void DisableCamera()
@@ -136,4 +123,40 @@ public class Character : MonoBehaviourPun
             virtualCamera.gameObject.SetActive(false);
         }
     }
+
+
+    //ㅁㅁtrash
+
+    //bool isGravity = false;
+    //private void OnControllerColliderHit(ControllerColliderHit hit)
+    //{
+    //    if (hit.gameObject.CompareTag("Ground") == true)
+    //    {
+    //        Debug.Log("Ground");
+    //        //중력 비활성화 코드 필요
+    //        isGravity = true;
+    //        return;
+    //    }
+
+    //}
+
+    //void OnGravity()
+    //{
+    //    if (!isGravity)//&& characterController.isGrounded == false
+    //    {
+    //        Vector3 directions = transform.TransformDirection(0, Time.deltaTime * gravity, 0);
+    //        characterController.Move(directions);
+    //    }
+    //    else
+    //    {
+    //        if (Input.GetKeyDown(KeyCode.Space) && isGravity)
+    //        {
+    //            isGravity = false;
+    //            //Vector3 directions = transform.TransformDirection(0,  5f, 0);
+    //            //characterController.Move(directions);
+    //        }
+
+    //    }
+    //}
+
 }

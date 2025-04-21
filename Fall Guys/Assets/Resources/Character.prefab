@@ -1384,10 +1384,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  power: 2.5
+  gravity: 9.81
   direction: {x: 0, y: 0, z: 0}
+  inputDirection: {x: 0, y: 0, z: 0}
   rotation: {fileID: 0}
   virtualCamera: {fileID: 1695189842986682886}
   characterController: {fileID: 0}
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!114 &1784405193349840492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1400,7 +1404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af500faae745b9d479681cca0319b48b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 200
+  speed: 300
   mouseX: 0
   mouseY: 0
 --- !u!114 &1621082278423313018
