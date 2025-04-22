@@ -6,10 +6,10 @@ public class DestroyZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Character obj = other.GetComponent<Character>();
-        if(obj != null)
+        Character character = other.GetComponent<Character>();
+        if(character != null)
         {
-            obj.RestPos();
+            character.InitializePosition();
         }
     }
 }

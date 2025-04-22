@@ -19,7 +19,7 @@ public class Character : MonoBehaviourPun
     [SerializeField] Camera virtualCamera;
     [SerializeField] CharacterController characterController;
 
-    [SerializeField] Vector3 startPos;
+    [SerializeField] Vector3 initializeDirection;  //초기위치 저장
 
     private void Awake()
     {
@@ -29,18 +29,19 @@ public class Character : MonoBehaviourPun
     }
     void Start()
     {
-        startPos = transform.position;
+        initializeDirection = transform.position;
+
         if (virtualCamera == null) virtualCamera = GetComponentInChildren<Camera>();
         DisableCamera();
     }
-    public void RestPos()
+    public void InitializePosition()
     {
         characterController.enabled = false;
-        transform.position = startPos;
+        transform.position = initializeDirection;
 
         characterController.enabled = true;
-        characterController.transform.position = startPos;
     }
+
     private void Update()
     {
         //나 자신이 아니면 움직이지 못하도록함

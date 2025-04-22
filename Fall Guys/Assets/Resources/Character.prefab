@@ -1391,7 +1391,7 @@ MonoBehaviour:
   rotation: {fileID: 0}
   virtualCamera: {fileID: 1695189842986682886}
   characterController: {fileID: 0}
-  startPos: {x: 0, y: 0, z: 0}
+  initializeDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &1784405193349840492
 MonoBehaviour:
   m_ObjectHideFlags: 0
