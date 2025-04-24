@@ -20,7 +20,7 @@ public class DialogManager : MonoBehaviourPunCallbacks
             inputField.ActivateInputField();
 
             //채팅을 입력 안한상태에서 Enter누르면 return
-            if (inputField.text.Length <= 0) { return; }
+            if (inputField.text.Length <= 0) { return; } //"" 출력방지 //막 엔터치면 빈 글짜 계속 설치가능한거 방지
 
             //채팅을 입력해야 채팅창에 출력
             string talk = inputField.text;
@@ -35,12 +35,15 @@ public class DialogManager : MonoBehaviourPunCallbacks
 
             //inputField의 텍스트를 초기화합니다.
             inputField.text = "";
+
+            //채팅을 입력한 후에도 이어서 입력을 할 수 있도록 설정합니다.
+            inputField.ActivateInputField();
         }
     }
 
     //[PunRPC]  :  photonView.RPC 사용
     [PunRPC]
-    void Talk(string message)
+    void Talk(string message) //객체가 입력한 채팅 설치 기능만 가능하도록 하게함 (초기화X - RPC라 전체적으로 영향 받아서)
     {
         //prefab을 하나 생성한 다음 text에 값을 설정합니다.
         GameObject talk = GameObject.Instantiate(Resources.Load<GameObject>("Talk"));
@@ -51,8 +54,6 @@ public class DialogManager : MonoBehaviourPunCallbacks
         //스크롤 뷰 - content 오브젝트의 자식으로 등록합니다.
         talk.transform.SetParent(parentTransform);
 
-        //채팅을 입력한 후에도 이어서 입력을 할 수 있도록 설정합니다.
-        inputField.ActivateInputField();
 
         //Canvas를 수동으로 동기화 시킵니다.
         Canvas.ForceUpdateCanvases(); // 즉시 레이아웃 갱신

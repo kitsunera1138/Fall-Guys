@@ -11,6 +11,28 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //room 생성 부모 위치
     [SerializeField] Transform parentPosition;
 
+    private void Start()
+    {
+        if (PhotonNetwork.InLobby == false)
+        {
+            PhotonNetwork.JoinLobby();
+        }
+    }
+
+    //callBack함수들 override //PlayfabManager꺼
+    public override void OnConnectedToMaster() //override
+    {
+        // JoinLobby() : 특정 로비를 생성하여 진입하는 함수
+        PhotonNetwork.JoinLobby();
+    }
+
+
+    private void Update()
+    {
+        Debug.Log("현재 상태: " +PhotonNetwork.NetworkClientState);
+    }
+
+
     public override void OnJoinedRoom()
     {
         PhotonNetwork.LoadLevel("Game");

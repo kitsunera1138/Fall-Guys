@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun; //MonoBehaviourPun
+using Photon.Pun;  //MonoBehaviourPun
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Rotation))]
 [RequireComponent(typeof(Mouse))]
@@ -46,6 +47,12 @@ public class Character : MonoBehaviourPun
     {
         //나 자신이 아니면 움직이지 못하도록함
         if (photonView.IsMine == false) return;
+
+        if (EventSystem.current.currentSelectedGameObject != null && 
+            EventSystem.current.currentSelectedGameObject.GetComponent<UnityEngine.UI.InputField>() != null)
+        {
+            return;
+        }
 
         Control();
 
