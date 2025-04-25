@@ -15,6 +15,8 @@ public class PlayfabManager : MonoBehaviourPunCallbacks
 
     [SerializeField] string gameVision = "1.0f";
 
+
+    [SerializeField] GameObject failurePanel;
     public void Login()
     {
         //클래스 생성
@@ -47,6 +49,7 @@ public class PlayfabManager : MonoBehaviourPunCallbacks
     //로그인 실패 시 호출되는 함수
     public void Fail(PlayFabError playFabError)
     {
+        failurePanel.SetActive(true);
         //발생한 에러 호출
         Debug.Log(playFabError.GenerateErrorReport());
     }

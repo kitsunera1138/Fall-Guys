@@ -11,6 +11,7 @@ public class DialogManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform parentTransform; //content
     [SerializeField] ScrollRect scrollRect;
 
+
     private void Update()
     {
         //Enter를 눌렀는가
@@ -23,7 +24,7 @@ public class DialogManager : MonoBehaviourPunCallbacks
             if (inputField.text.Length <= 0) { return; } //"" 출력방지 //막 엔터치면 빈 글짜 계속 설치가능한거 방지
 
             //채팅을 입력해야 채팅창에 출력
-            string talk = inputField.text;
+            string talk = PhotonNetwork.LocalPlayer.NickName + " : " + inputField.text;
 
             //첫 번째 매개변수 : 호출할 함수의 이름,
             //두 번째 매개변수: 현재 룸에 있는 클라이언트에게 호출할 대상

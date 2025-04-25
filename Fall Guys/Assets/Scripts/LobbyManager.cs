@@ -29,7 +29,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        Debug.Log("현재 상태: " +PhotonNetwork.NetworkClientState);
+        //로비 상태인지 게임 들어간 상태인지 등등
+        //Debug.Log("현재 상태: " +PhotonNetwork.NetworkClientState);
     }
 
 

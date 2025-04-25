@@ -167,4 +167,19 @@ public class Character : MonoBehaviourPun
     //    }
     //}
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Authorized")) //other.tag
+        {
+            Debug.Log("Authorized Object");
+            //누가 삭제하는 지 따로 처리
+            PhotonView clone = other.GetComponent<PhotonView>();
+
+            if (clone.IsMine)
+            {
+                PhotonNetwork.Destroy(other.gameObject);
+            }
+        }
+    }
 }
